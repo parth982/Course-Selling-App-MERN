@@ -17,6 +17,12 @@ const userSchema = new Schema({
       ref: "Course",
     },
   ],
+  // inCartCourses: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: "Course",
+  //   },
+  // ],
 });
 
 const User = mongoose.model("User", userSchema);

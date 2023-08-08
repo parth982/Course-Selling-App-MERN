@@ -18,7 +18,7 @@ import {
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import AuthStore from "../../state/store";
+import AuthStore from "../../state/AuthStore";
 
 const Navbar = () => {
   const btnRef = useRef();

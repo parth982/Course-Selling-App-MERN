@@ -15,12 +15,16 @@ import {
 } from "@chakra-ui/react";
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import CartStore from "../../state/CartStore";
+import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const toast = useToast();
-  const [courses, setCourses] = useState([]);
-  const [purchasedCourses, setPurchasedCourses] = useState([]);
+  const { setCourses, courses, purchasedCourses, setPurchasedCourses } =
+    CartStore();
+
+  const navigate = useNavigate();
 
   const headers = {
     authorization: "Bearer " + localStorage.getItem("token"),
@@ -46,34 +50,8 @@ const Courses = () => {
   };
 
   useEffect(() => {
-    // Fetch initial data
-    getAllCoursesInfo();
-    // Set interval to fetch data every 3 seconds
-    const interval = setInterval(getAllCoursesInfo, 1000);
-    // Cleanup interval on unmount
-    return () => {
-      clearInterval(interval);
-    };
+    setInterval(() => getAllCoursesInfo(), 1000);
   }, []);
-
-  const buyCourse = (courseId) => {
-    const originalPurchasedCourse = [...purchasedCourses];
-    setPurchasedCourses([...purchasedCourses, courseId]);
-    axios
-      .put("http://localhost:4000/users/courses/" + courseId, {}, { headers })
-      .then((res) => {
-        toast({
-          title: "Course Purchased!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-          position: "top",
-        });
-      })
-      .catch((err) => {
-        setPurchasedCourses(originalPurchasedCourse);
-      });
-  };
 
   return (
     <>
@@ -89,7 +67,10 @@ const Courses = () => {
           spacingX={5}
         >
           {courses?.map((course) => (
-            <Box key={course._id}>
+            <Box
+              key={course._id}
+              onClick={() => navigate(`/courses/${course._id}`)}
+            >
               <Card maxW="sm" border={"1px solid"}>
                 <CardBody>
                   <Center>
@@ -106,28 +87,36 @@ const Courses = () => {
 
                 <Divider />
 
-                <CardFooter>
+                {/* <CardFooter justifyContent={"center"}>
                   {purchasedCourses.includes(course._id) ? (
                     <Box
                       color={"white"}
                       bg={"blue"}
-                      p={"6px 6px"}
+                      p={"6px 10px"}
                       borderRadius={"14px"}
                     >
                       Already Purchased
+                    </Box>
+                  ) : cart.some((c) => c._id === course._id) ? (
+                    <Box
+                      color={"white"}
+                      bg={"orange"}
+                      p={"6px 10px"}
+                      borderRadius={"14px"}
+                    >
+                      In Cart
                     </Box>
                   ) : (
                     <Button
                       variant="solid"
                       colorScheme="whatsapp"
-                      onClick={() => buyCourse(course._id)}
+                      onClick={() => FunAddToCart(course)}
                     >
                       Purchase
                     </Button>
                   )}
 
-                  <Box>{/* STATUS if Bought or Not */}</Box>
-                </CardFooter>
+                </CardFooter> */}
               </Card>
             </Box>
           ))}

@@ -1,4 +1,5 @@
 import { AtSignIcon, HamburgerIcon, ViewIcon } from "@chakra-ui/icons";
+import { AiFillShopping } from "react-icons/ai";
 import {
   Button,
   Divider,
@@ -14,11 +15,14 @@ import {
   Text,
   useDisclosure,
   useToast,
+  Badge,
+  Box,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthStore from "../../state/store";
+import AuthStore from "../../state/AuthStore";
+import cartStore from "../../state/CartStore";
 
 const Navbar = () => {
   const btnRef = useRef();
@@ -27,6 +31,7 @@ const Navbar = () => {
   const [username, setUsername] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLogged, setIsLogged } = AuthStore();
+  const { cart, setIsCartOpen } = cartStore();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -131,8 +136,27 @@ const Navbar = () => {
             >
               Learn.io
             </Text>
-            <Flex align="center">
-              <Button colorScheme="orange" mr={2} onClick={handleLogout}>
+            <Flex align="center" justifyContent={"space-between"}>
+              <Box position="relative">
+                <Badge
+                  colorScheme="red"
+                  borderRadius="full"
+                  fontSize="15px"
+                  position="absolute"
+                  top="-8px"
+                  right="-8px"
+                  zIndex="10"
+                >
+                  {cart.length}
+                </Badge>
+                <IconButton
+                  onClick={setIsCartOpen}
+                  aria-label="Shop"
+                  icon={<AiFillShopping />}
+                  // zIndex="2"
+                />
+              </Box>
+              <Button colorScheme="orange" mx={4} onClick={handleLogout}>
                 Log-Out
               </Button>
             </Flex>

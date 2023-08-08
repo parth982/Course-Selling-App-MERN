@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import cartStore from "../../state/CartStore";
 
 const UpdCourse = () => {
   const [price, setPrice] = useState(0);
@@ -23,6 +24,7 @@ const UpdCourse = () => {
   const [image, setImage] = useState("");
   const [course, setCourse] = useState({});
   const [editMode, setEditMode] = useState(false);
+  const { courses } = cartStore();
 
   let { courseId } = useParams();
   const toast = useToast();
@@ -93,6 +95,7 @@ const UpdCourse = () => {
                   id="title"
                   placeholder="Title.."
                   onChange={(e) => setTitle(e.target.value)}
+                  defaultValue={courses.find((c) => c._id === courseId)?.title}
                 />
                 <FormLabel
                   htmlFor="description"
@@ -105,6 +108,9 @@ const UpdCourse = () => {
                   id="description"
                   placeholder="Description.."
                   onChange={(e) => setDesc(e.target.value)}
+                  defaultValue={
+                    courses.find((c) => c._id === courseId)?.description
+                  }
                 />
                 <FormLabel
                   htmlFor="price"
@@ -118,6 +124,7 @@ const UpdCourse = () => {
                   type="number"
                   placeholder="Price.."
                   onChange={(e) => setPrice(e.target.value)}
+                  defaultValue={courses.find((c) => c._id === courseId)?.price}
                 />
                 <FormLabel
                   htmlFor="image"
@@ -130,6 +137,9 @@ const UpdCourse = () => {
                   id="image"
                   placeholder="Image.."
                   onChange={(e) => setImage(e.target.value)}
+                  defaultValue={
+                    courses.find((c) => c._id === courseId)?.imageLink
+                  }
                 />
               </FormControl>
             </VStack>

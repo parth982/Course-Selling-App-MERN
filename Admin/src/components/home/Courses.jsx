@@ -12,17 +12,17 @@ import {
   Button,
   SimpleGrid,
   useToast,
-  localStorageManager,
 } from "@chakra-ui/react";
 
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import CartStore from "../../state/CartStore";
 
 const Courses = () => {
   const toast = useToast();
   const navigate = useNavigate();
-  const [courses, setCourses] = useState([]);
+  const { courses, setCourses } = CartStore();
 
   const headers = {
     authorization: "Bearer " + localStorage.getItem("token"),
@@ -39,9 +39,7 @@ const Courses = () => {
     axios
       .delete("http://localhost:4000/admin/courses/" + courseId, { headers })
       .then((res) => {
-        setCourses((prevCourses) =>
-          prevCourses.filter((c) => c._id !== courseId)
-        );
+        setCourses(courses.filter((c) => c._id !== courseId));
         toast({
           title: "Course Deleted",
           status: "success",

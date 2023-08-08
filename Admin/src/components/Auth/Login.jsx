@@ -15,7 +15,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import AuthStore from "../../state/store";
+import AuthStore from "../../state/AuthStore";
 
 const schema = z.object({
   username: z
