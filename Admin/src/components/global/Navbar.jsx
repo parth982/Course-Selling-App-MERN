@@ -126,9 +126,10 @@ const Navbar = () => {
               </DrawerContent>
             </Drawer>
             <Text
-              fontSize={{ base: "3xl", md: "4xl" }}
+              fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
               fontWeight="bold"
               cursor="pointer"
+              fontFamily="cursive"
               onClick={() => navigate("/")}
             >
               Learn.io
@@ -148,7 +149,9 @@ const Navbar = () => {
           h="60px"
           color="#fff"
         >
-          <Text fontSize="3xl">Admin Dashboard</Text>
+          <Text fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}>
+            Admin Dashboard
+          </Text>
         </Flex>
       )}
     </>

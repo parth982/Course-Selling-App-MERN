@@ -5,17 +5,17 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Text,
   VStack,
   useToast,
-  Text,
 } from "@chakra-ui/react";
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import AuthStore from "../../state/AuthStore";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import AuthStore from "../../state/AuthStore";
 
 const schema = z.object({
   username: z
@@ -28,12 +28,12 @@ const schema = z.object({
     .max(50),
 });
 
-const Login = () => {
+const AuthForm = ({ type }) => {
   const toast = useToast();
   const navigate = useNavigate();
+  const { setIsLogged } = AuthStore();
   const [show, setShow] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const { setIsLogged } = AuthStore();
 
   const {
     register,
@@ -46,25 +46,34 @@ const Login = () => {
 
   const submitHandler = (formData) => {
     setLoading(true);
-
+    const url =
+      type === "login"
+        ? "http://localhost:4000/users/login"
+        : "http://localhost:4000/users/signup";
     axios
-      .post("http://localhost:4000/users/login", {}, { headers: formData })
+      .post(url, formData)
       .then((res) => {
         setLoading(false);
-        navigate("/courses");
-        setIsLogged(true);
+        reset();
+        const successMessage =
+          type === "login" ? "Login Successful" : "Registration Successful";
         toast({
-          title: "Login Successful!!!",
+          title: successMessage,
           status: "success",
           duration: 5000,
           isClosable: true,
-          position: "top",
+          position: "bottom",
         });
-        localStorage.setItem("token", res.data.token);
+        if (type === "login") {
+          localStorage.setItem("token", res.data.token);
+          navigate("/courses");
+          setIsLogged(true);
+        }
       })
       .catch((err) => {
         toast({
-          title: "Login Failed!",
+          title: `${type === "login" ? "Login" : "Sign Up"} Failed!`,
+          description: err.message,
           status: "error",
           duration: 5000,
           isClosable: true,
@@ -75,17 +84,13 @@ const Login = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit((formData) => {
-        submitHandler(formData);
-        reset();
-      })}
-    >
+    <form onSubmit={handleSubmit((formData) => submitHandler(formData))}>
       <VStack spacing={2}>
         <FormControl required>
           <FormLabel>Username</FormLabel>
           <Input
             type="text"
+            width={"100%"}
             placeholder="Enter your Username.."
             {...register("username")}
           />
@@ -120,16 +125,16 @@ const Login = () => {
         <Button
           width={"100%"}
           marginTop={2}
-          colorScheme="whatsapp"
+          colorScheme={type === "login" ? "whatsapp" : "orange"}
           size="sm"
           type="submit"
           isLoading={isLoading}
         >
-          Login
+          {type === "login" ? "Login" : "Sign Up"}
         </Button>
       </VStack>
     </form>
   );
 };
 
-export default Login;
+export default AuthForm;

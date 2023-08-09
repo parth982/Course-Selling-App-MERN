@@ -48,8 +48,17 @@ const Purchased = () => {
 
   return (
     <>
+      <Box textAlign="center" marginY="4">
+        <Heading as="h1" size="xl" color="orange.700" marginBottom="2">
+          Purchased Courses
+        </Heading>
+      </Box>
       {purchasedCourses?.length === 0 ? (
-        <p>No courses Purchased</p>
+        <Box textAlign="center" mt={"200px"}>
+          <Text fontSize="2xl" fontWeight="semibold" color="gray.600">
+            No Purchased Courses
+          </Text>
+        </Box>
       ) : (
         <SimpleGrid
           padding={10}
@@ -60,18 +69,35 @@ const Purchased = () => {
           spacingX={5}
         >
           {purchasedCourses?.map((course) => (
-            <Box key={course._id}>
-              <Card maxW="sm" border={"1px solid"}>
+            <Box
+              key={course._id}
+              _hover={{
+                transform: "scale(1.05)",
+              }}
+              transition="all 0.2s ease-in-out"
+              w={"70%"}
+            >
+              <Card size={"md"} maxW="sm" borderRadius="lg" overflow="hidden">
+                <Image src={course.imageLink} alt={course.title} />
+
                 <CardBody>
-                  <Center>
-                    <Image src={course.imageLink} boxSize="150px" />
-                  </Center>
-                  <Stack mt="6" spacing="3">
-                    <Heading size="md">Title: {course.title}</Heading>
-                    <Heading size="sm">
-                      Description: {course.description}
+                  <Stack mt="0" spacing="1">
+                    <Heading size="lg" fontWeight="semibold">
+                      {course.title}
                     </Heading>
-                    <Text>Price: {course.price}</Text>
+
+                    <Text
+                      fontSize="md"
+                      color="gray.600"
+                      fontWeight="normal"
+                      lineHeight="taller"
+                    >
+                      {course.description}
+                    </Text>
+
+                    <Text fontSize="md" fontWeight="bold" color="teal.500">
+                      Price: ${course.price}
+                    </Text>
                   </Stack>
                 </CardBody>
 

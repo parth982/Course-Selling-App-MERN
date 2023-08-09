@@ -1,28 +1,34 @@
-import { AtSignIcon, HamburgerIcon, ViewIcon } from "@chakra-ui/icons";
-import { AiFillShopping } from "react-icons/ai";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Badge,
+  Box,
   Button,
-  Divider,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   HStack,
   IconButton,
+  Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
   Text,
   useDisclosure,
   useToast,
-  Badge,
-  Box,
+  Heading,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import { AiFillShopping } from "react-icons/ai";
+import { BiSearchAlt2 } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../state/AuthStore";
 import cartStore from "../../state/CartStore";
+import DrawerComponent from "./Drawer";
+import CourseCard from "./CoursesCard";
+import SearchCard from "../home/SearchCard";
 
 const Navbar = () => {
   const btnRef = useRef();
@@ -31,15 +37,28 @@ const Navbar = () => {
   const [username, setUsername] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLogged, setIsLogged } = AuthStore();
-  const { cart, setIsCartOpen } = cartStore();
+  const {
+    cart,
+    setCourses,
+    courses,
+    purchasedCourses,
+    setPurchasedCourses,
+    setIsCartOpen,
+    isCartOpen,
+  } = cartStore();
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const headers = {
+    authorization: "Bearer " + token,
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    var headers = {
-      authorization: "Bearer " + token,
-    };
     axios
       .get("http://localhost:4000/admin/me", { headers })
       .then((res) => {
@@ -65,113 +84,144 @@ const Navbar = () => {
     });
   };
 
+  const handleSearch = () => {
+    if (!search) {
+      toast({
+        title: "Please Enter something in search",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "top-left",
+      });
+      return;
+    }
+    setLoading(true);
+    axios
+      .get(`http://localhost:4000/users/queryCourses?search=${search}`, {
+        headers: headers,
+      })
+      .then((res) => {
+        setSearchResult(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast({
+          title: "Error Occurred!",
+          description: "Failed to Load the Search Results",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+        setLoading(false);
+      });
+  };
+
   return (
     <>
-      {username ? (
-        <>
-          <HStack
-            justifyContent="space-between"
-            paddingY={3}
-            paddingX={6}
-            bg="purple.500"
-            color="white"
-          >
-            <IconButton
-              ref={btnRef}
-              icon={<HamburgerIcon />}
-              onClick={onOpen}
-            />
-            <Drawer
-              isOpen={isOpen}
-              placement="left"
-              onClose={onClose}
-              finalFocusRef={btnRef}
-              size={"xs"}
-            >
-              <DrawerOverlay />
-              <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>Features</DrawerHeader>
-                <Divider borderColor="dark" borderWidth="2px" />
-                <DrawerBody mt={3}>
-                  <Divider />
-                  <Flex
-                    justifyContent={"space-between"}
-                    mb={2}
-                    mt={2}
-                    alignItems={"center"}
-                    onClick={() => {
-                      navigate("/courses");
-                      onClose();
-                    }}
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <IconButton icon={<ViewIcon />} />
-                    <Text>All Courses</Text>
-                  </Flex>
-                  <Divider />
-                  <Flex
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    mt={2}
-                    mb={2}
-                    onClick={() => {
-                      navigate("/Purchased");
-                      onClose();
-                    }}
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <IconButton icon={<AtSignIcon />} />
-                    <Text>Purchased Courses </Text>
-                  </Flex>
-                  <Divider />
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
-            <Text
-              fontSize={{ base: "3xl", md: "4xl" }}
-              fontWeight="bold"
-              cursor="pointer"
-              onClick={() => navigate("/")}
-            >
-              Learn.io
-            </Text>
-            <Flex align="center" justifyContent={"space-between"}>
-              <Box position="relative">
-                <Badge
-                  colorScheme="red"
-                  borderRadius="full"
-                  fontSize="15px"
-                  position="absolute"
-                  top="-8px"
-                  right="-8px"
-                  zIndex="10"
-                >
-                  {cart.length}
-                </Badge>
-                <IconButton
-                  onClick={setIsCartOpen}
-                  aria-label="Shop"
-                  icon={<AiFillShopping />}
-                  // zIndex="2"
-                />
-              </Box>
-              <Button colorScheme="orange" mx={4} onClick={handleLogout}>
-                Log-Out
-              </Button>
-            </Flex>
-          </HStack>
-        </>
-      ) : (
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          bg="#777"
-          h="60px"
-          color="#fff"
+      <HStack
+        justifyContent="space-between"
+        alignItems="center"
+        paddingY={3}
+        paddingX={6}
+        color="white"
+        bg={"#283593"}
+      >
+        <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={onOpen} />
+        <DrawerComponent isOpen={isOpen} onClose={onClose} />
+        <Text
+          fontSize={"4xl"}
+          fontWeight="bold"
+          cursor="pointer"
+          onClick={() => navigate("/")}
+          fontFamily="cursive"
+          color="white"
+          flex="1"
+          textAlign="center"
+          ml={"150px"}
         >
-          <Text fontSize="3xl">User Dashboard</Text>
+          Learn.io
+        </Text>
+        <Flex align="center">
+          <Box position="relative" mr={4}>
+            <Badge
+              colorScheme="red"
+              borderRadius="full"
+              fontSize="15px"
+              position="absolute"
+              top="-8px"
+              right="-8px"
+              zIndex="10"
+            >
+              {cart.length}
+            </Badge>
+            <IconButton
+              onClick={setIsCartOpen}
+              aria-label="Shop"
+              icon={<AiFillShopping />}
+            />
+          </Box>
+          <IconButton
+            aria-label="Search"
+            icon={<BiSearchAlt2 />}
+            fontSize="1.5rem"
+            onClick={() => setIsSearchOpen(true)}
+          />
+          <Button ml={7} colorScheme="orange" onClick={handleLogout}>
+            Log-Out
+          </Button>
         </Flex>
+      </HStack>
+      {isSearchOpen && (
+        <Modal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+          size="lg"
+        >
+          <ModalOverlay />
+          <ModalContent bg="#E0E7FF">
+            <ModalHeader>
+              <Heading size="xl" fontWeight="bold" fontFamily="cursive">
+                Search Courses
+              </Heading>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Flex direction="column">
+                <Box mb="4">
+                  <Flex>
+                    <Input
+                      placeholder="Enter Course title.."
+                      mr={2}
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      borderColor="black"
+                    />
+                    <Button colorScheme="twitter" leftIcon={<BiSearchAlt2 />}>
+                      Search
+                    </Button>
+                  </Flex>
+                </Box>
+
+                {isLoading ? (
+                  <Text>Loading...</Text>
+                ) : (
+                  <Box>
+                    {searchResult.map((course) => (
+                      <SearchCard
+                        key={course._id}
+                        course={course}
+                        purchasedCourses={purchasedCourses}
+                        cart={cart}
+                      />
+                    ))}
+                  </Box>
+                )}
+              </Flex>
+            </ModalBody>
+            <ModalFooter></ModalFooter>
+          </ModalContent>
+        </Modal>
       )}
     </>
   );

@@ -124,7 +124,7 @@ const App = () => {
 
             {purchasedCourses.includes(course?._id) ? (
               <Button colorScheme="facebook" size="md">
-                Already Purchased
+                Purchased
               </Button>
             ) : cart.some((c) => c._id === course._id) ? (
               <Button colorScheme="orange" size="md">
@@ -137,7 +137,7 @@ const App = () => {
                 size="md"
                 onClick={() => FunAddToCart(course)}
               >
-                Purchase
+                Add to Cart
               </Button>
             )}
           </Box>

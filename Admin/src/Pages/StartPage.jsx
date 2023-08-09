@@ -1,8 +1,5 @@
 import React from "react";
-import Login from "../components/Auth/Login";
-import SignUp from "../components/Auth/SignUp";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import AuthForm from "../components/Auth/AuthForm";
 
 import {
   Container,
@@ -16,14 +13,6 @@ import {
 } from "@chakra-ui/react";
 
 const StartPage = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem("UserInfo"));
-    if (userInfo) {
-      // navigate("/chats");
-    }
-  }, [navigate]);
   return (
     <Container>
       <Box
@@ -50,10 +39,10 @@ const StartPage = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Login />
+              <AuthForm type="login" />
             </TabPanel>
             <TabPanel>
-              <SignUp />
+              <AuthForm type="signup" />
             </TabPanel>
           </TabPanels>
         </Tabs>

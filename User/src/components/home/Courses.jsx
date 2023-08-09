@@ -1,30 +1,14 @@
-import {
-  Box,
-  CardBody,
-  Card,
-  Heading,
-  Divider,
-  CardFooter,
-  Stack,
-  Image,
-  Text,
-  Center,
-  Button,
-  SimpleGrid,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Text, useToast } from "@chakra-ui/react";
 
 import axios from "axios";
 import React, { useEffect } from "react";
 import CartStore from "../../state/CartStore";
-import { useNavigate } from "react-router-dom";
+import CourseCard from "../global/CoursesCard";
 
 const Courses = () => {
   const toast = useToast();
-  const { setCourses, courses, purchasedCourses, setPurchasedCourses } =
+  const { cart, setCourses, courses, purchasedCourses, setPurchasedCourses } =
     CartStore();
-
-  const navigate = useNavigate();
 
   const headers = {
     authorization: "Bearer " + localStorage.getItem("token"),
@@ -50,75 +34,39 @@ const Courses = () => {
   };
 
   useEffect(() => {
-    setInterval(() => getAllCoursesInfo(), 1000);
+    getAllCoursesInfo();
   }, []);
 
   return (
     <>
+      <Box textAlign="center" marginY="4">
+        <Heading as="h1" size="xl" color="orange.700" marginBottom="2">
+          All Courses
+        </Heading>
+      </Box>
+
       {courses?.length === 0 ? (
-        <p>No courses available</p>
+        <Box textAlign="center" mt={"200px"}>
+          <Text fontSize="2xl" fontWeight="semibold" color="gray.600">
+            No courses available
+          </Text>
+        </Box>
       ) : (
         <SimpleGrid
           padding={10}
-          width={"92%"}
-          margin={"auto"}
-          columns={{ base: "1", md: "2", lg: "3" }}
-          spacingY={5}
-          spacingX={5}
+          width="90%"
+          margin="auto"
+          columns={{ base: "2", md: "3", lg: "4" }}
+          spacingY={8}
+          spacingX={8}
         >
           {courses?.map((course) => (
-            <Box
+            <CourseCard
               key={course._id}
-              onClick={() => navigate(`/courses/${course._id}`)}
-            >
-              <Card maxW="sm" border={"1px solid"}>
-                <CardBody>
-                  <Center>
-                    <Image src={course.imageLink} boxSize="150px" />
-                  </Center>
-                  <Stack mt="6" spacing="3">
-                    <Heading size="md">Title: {course.title}</Heading>
-                    <Heading size="sm">
-                      Description: {course.description}
-                    </Heading>
-                    <Text>Price: {course.price}</Text>
-                  </Stack>
-                </CardBody>
-
-                <Divider />
-
-                {/* <CardFooter justifyContent={"center"}>
-                  {purchasedCourses.includes(course._id) ? (
-                    <Box
-                      color={"white"}
-                      bg={"blue"}
-                      p={"6px 10px"}
-                      borderRadius={"14px"}
-                    >
-                      Already Purchased
-                    </Box>
-                  ) : cart.some((c) => c._id === course._id) ? (
-                    <Box
-                      color={"white"}
-                      bg={"orange"}
-                      p={"6px 10px"}
-                      borderRadius={"14px"}
-                    >
-                      In Cart
-                    </Box>
-                  ) : (
-                    <Button
-                      variant="solid"
-                      colorScheme="whatsapp"
-                      onClick={() => FunAddToCart(course)}
-                    >
-                      Purchase
-                    </Button>
-                  )}
-
-                </CardFooter> */}
-              </Card>
-            </Box>
+              course={course}
+              purchasedCourses={purchasedCourses}
+              cart={cart}
+            />
           ))}
         </SimpleGrid>
       )}

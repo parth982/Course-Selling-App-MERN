@@ -1,7 +1,4 @@
 import React from "react";
-import Login from "../components/Auth/Login";
-import SignUp from "../components/Auth/SignUp";
-
 import {
   Box,
   Container,
@@ -12,6 +9,7 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
+import AuthForm from "../components/Auth/AuthForm";
 
 const StartPage = () => {
   return (
@@ -40,10 +38,10 @@ const StartPage = () => {
           </TabList>
           <TabPanels>
             <TabPanel>
-              <Login />
+              <AuthForm type="login" />
             </TabPanel>
             <TabPanel>
-              <SignUp />
+              <AuthForm type="signup" />
             </TabPanel>
           </TabPanels>
         </Tabs>

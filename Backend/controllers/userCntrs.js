@@ -20,7 +20,7 @@ const signupUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { username, password } = req.headers;
+  const { username, password } = req.body;
   try {
     const user = await User.findOne({ username, password });
     if (user) {
@@ -92,10 +92,22 @@ const getUserPurchasedCourses = asyncHandler(async (req, res) => {
   }
 });
 
+const QueryCourses = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [{ title: { $regex: req.query.search, $options: "i" } }],
+      }
+    : {};
+
+  const courses = await Course.find(keyword);
+  res.send(courses);
+});
+
 module.exports = {
   signupUser,
   loginUser,
   getUserCourses,
   purchaseCourse,
   getUserPurchasedCourses,
+  QueryCourses,
 };

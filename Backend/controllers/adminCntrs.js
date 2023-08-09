@@ -21,7 +21,7 @@ const signupAdmin = asyncHandler(async (req, res) => {
 });
 
 const loginAdmin = asyncHandler(async (req, res) => {
-  const { username, password } = req.headers;
+  const { username, password } = req.body;
   try {
     const admin = await Admin.findOne({ username, password });
     if (admin) {
