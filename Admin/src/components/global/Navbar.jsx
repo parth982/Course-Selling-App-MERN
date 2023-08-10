@@ -1,13 +1,6 @@
-import { HamburgerIcon, PlusSquareIcon, ViewIcon } from "@chakra-ui/icons";
+import { HamburgerIcon } from "@chakra-ui/icons";
 import {
   Button,
-  Divider,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerHeader,
-  DrawerOverlay,
   Flex,
   HStack,
   IconButton,
@@ -19,6 +12,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AuthStore from "../../state/AuthStore";
+import DrawerComponent from "./Drawer";
 
 const Navbar = () => {
   const btnRef = useRef();
@@ -65,91 +59,49 @@ const Navbar = () => {
   return (
     <>
       {username ? (
-        <>
-          <HStack
-            justifyContent="space-between"
-            paddingY={3}
-            paddingX={6}
-            bg="purple.500"
-            color="white"
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          paddingY={3}
+          paddingX={6}
+          bg="#283593"
+          color="white"
+        >
+          <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={onOpen} />
+          <DrawerComponent isOpen={isOpen} onClose={onClose} />
+          <Text
+            fontSize="4xl"
+            fontWeight="bold"
+            cursor="pointer"
+            fontFamily="cursive"
+            onClick={() => navigate("/courses")}
+            ml={"34px"}
           >
-            <IconButton
-              ref={btnRef}
-              icon={<HamburgerIcon />}
-              onClick={onOpen}
-            />
-            <Drawer
-              isOpen={isOpen}
-              placement="left"
-              onClose={onClose}
-              finalFocusRef={btnRef}
-              size={"xs"}
-            >
-              <DrawerOverlay />
-              <DrawerContent>
-                <DrawerCloseButton />
-                <DrawerHeader>Features</DrawerHeader>
-                <Divider borderColor="dark" borderWidth="2px" />
-                <DrawerBody mt={3}>
-                  <Divider />
-                  <Flex
-                    justifyContent={"space-between"}
-                    mb={2}
-                    mt={2}
-                    alignItems={"center"}
-                    onClick={() => {
-                      navigate("/courses");
-                      onClose();
-                    }}
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <IconButton icon={<ViewIcon />} />
-                    <Text>All Courses</Text>
-                  </Flex>
-                  <Divider />
-                  <Flex
-                    justifyContent={"space-between"}
-                    alignItems={"center"}
-                    mt={2}
-                    mb={2}
-                    onClick={() => {
-                      navigate("/AddCourse");
-                      onClose();
-                    }}
-                    _hover={{ cursor: "pointer" }}
-                  >
-                    <IconButton icon={<PlusSquareIcon />} />
-                    <Text>Create Course</Text>
-                  </Flex>
-                  <Divider />
-                </DrawerBody>
-              </DrawerContent>
-            </Drawer>
-            <Text
-              fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}
-              fontWeight="bold"
-              cursor="pointer"
-              fontFamily="cursive"
-              onClick={() => navigate("/")}
-            >
-              Learn.io
-            </Text>
-            <Flex align="center">
-              <Button colorScheme="orange" mr={2} onClick={handleLogout}>
-                Log-Out
-              </Button>
-            </Flex>
-          </HStack>
-        </>
+            Learn.io
+          </Text>
+          <Flex align="center">
+            <Button colorScheme="orange" mr={2} onClick={handleLogout}>
+              Log-Out
+            </Button>
+          </Flex>
+        </HStack>
       ) : (
         <Flex
           justifyContent="center"
           alignItems="center"
-          bg="#777"
-          h="60px"
-          color="#fff"
+          bgGradient="linear(to-r, #FFA500, #FF6347)"
+          h="80px"
+          color="white"
+          boxShadow="md"
         >
-          <Text fontSize={{ base: "4xl", md: "4xl", lg: "5xl" }}>
+          <Text
+            fontSize={{ base: "3xl", md: "4xl" }}
+            fontWeight="bold"
+            fontFamily="cursive"
+            letterSpacing="wide"
+            textTransform="uppercase"
+            textAlign="center"
+          >
             Admin Dashboard
           </Text>
         </Flex>

@@ -125,7 +125,7 @@ const AuthForm = ({ type }) => {
         <Button
           width={"100%"}
           marginTop={2}
-          colorScheme={type === "login" ? "whatsapp" : "orange"}
+          colorScheme={type === "login" ? "whatsapp" : "purple"}
           size="sm"
           type="submit"
           isLoading={isLoading}

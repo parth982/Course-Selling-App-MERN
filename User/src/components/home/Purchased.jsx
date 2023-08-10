@@ -47,8 +47,8 @@ const Purchased = () => {
   );
 
   return (
-    <>
-      <Box textAlign="center" marginY="4">
+    <Box bg={"gray.200"} height={"100vh"}>
+      <Box textAlign="center" pt={4}>
         <Heading as="h1" size="xl" color="orange.700" marginBottom="2">
           Purchased Courses
         </Heading>
@@ -60,13 +60,12 @@ const Purchased = () => {
           </Text>
         </Box>
       ) : (
-        <SimpleGrid
-          padding={10}
-          width={"92%"}
-          margin={"auto"}
-          columns={{ base: "1", md: "2", lg: "3" }}
-          spacingY={5}
-          spacingX={5}
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+          gap="20px"
+          paddingX="60px"
+          py={5}
         >
           {purchasedCourses?.map((course) => (
             <Box
@@ -75,9 +74,15 @@ const Purchased = () => {
                 transform: "scale(1.05)",
               }}
               transition="all 0.2s ease-in-out"
-              w={"70%"}
+              margin="0 auto"
             >
-              <Card size={"md"} maxW="sm" borderRadius="lg" overflow="hidden">
+              <Card
+                size={"md"}
+                maxW="sm"
+                border={"1.5px groove"}
+                borderRadius="lg"
+                overflow="hidden"
+              >
                 <Image src={course.imageLink} alt={course.title} />
 
                 <CardBody>
@@ -105,9 +110,9 @@ const Purchased = () => {
               </Card>
             </Box>
           ))}
-        </SimpleGrid>
+        </Box>
       )}
-    </>
+    </Box>
   );
 };
 

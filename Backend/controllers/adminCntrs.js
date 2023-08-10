@@ -88,6 +88,18 @@ const getCourses = asyncHandler(async (req, res) => {
   }
 });
 
+const getOneCourse = asyncHandler(async (req, res) => {
+  const courseId = req.params.courseId;
+  try {
+    const course = await Course.findById(courseId);
+    course
+      ? res.json({ course })
+      : res.status(404).json({ message: "Course not found" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 const getUsername = asyncHandler(async (req, res) => {
   const { username } = req.user;
   if (username) {
@@ -105,4 +117,5 @@ module.exports = {
   deleteCourse,
   getCourses,
   getUsername,
+  getOneCourse,
 };

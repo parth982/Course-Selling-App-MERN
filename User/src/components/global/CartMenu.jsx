@@ -75,22 +75,26 @@ const CartMenu = () => {
   return (
     <Drawer isOpen={isCartOpen} placement="right" size={"sm"}>
       <DrawerOverlay />
-      <DrawerContent bg={"#F3F4F8"}>
+      <DrawerContent>
         <DrawerCloseButton
           marginTop={2}
           onClick={() => setIsCartOpen(!isCartOpen)}
         />
 
         {/* Heading */}
-        <DrawerHeader bg="purple.500">
-          <Text fontFamily={"Cinzel"} fontSize="2xl" color="black">
-            YOUR CART ({cart.length} items)
-          </Text>
+
+        <DrawerHeader
+          fontSize="3xl"
+          textColor={"black"}
+          fontWeight="bold"
+          bg="gray.400"
+        >
+          CART ({cart.length} items)
         </DrawerHeader>
         <Divider border={"1px solid black"} />
 
         {/* Cart List */}
-        <DrawerBody>
+        <DrawerBody bg={"gray.200"}>
           {cart.map((course) => (
             <Box key={course?._id} py={4}>
               <FlexBox alignItems="center" justifyContent="space-between">

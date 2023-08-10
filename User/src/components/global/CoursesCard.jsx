@@ -23,9 +23,15 @@ const CourseCard = ({ course, purchasedCourses, cart }) => {
         transform: "scale(1.05)",
       }}
       transition="all 0.2s ease-in-out"
-      border={"1px groove "}
+      margin={"0 auto"}
     >
-      <Card size={"md"} maxW="sm" borderRadius="lg" overflow="hidden">
+      <Card
+        size={"md"}
+        maxW="sm"
+        borderRadius="lg"
+        overflow="hidden"
+        border={"1.5px groove"}
+      >
         <Image src={course.imageLink} alt={course.title} />
 
         <CardBody>
@@ -34,16 +40,11 @@ const CourseCard = ({ course, purchasedCourses, cart }) => {
               {course.title}
             </Heading>
 
-            <Text
-              fontSize="md"
-              color="gray.600"
-              fontWeight="normal"
-              lineHeight="taller"
-            >
+            <Text fontSize="md" color="gray.600" fontWeight="normal">
               {course.description}
             </Text>
 
-            <Text fontSize="md" fontWeight="bold" color="teal.500">
+            <Text fontSize="md" fontWeight="bold" color="purple.400">
               Price: ${course.price}
             </Text>
           </Stack>

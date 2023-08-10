@@ -5,19 +5,19 @@ import {
   Button,
   Flex,
   HStack,
+  Heading,
   IconButton,
   Input,
   Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalCloseButton,
   ModalBody,
+  ModalCloseButton,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Text,
   useDisclosure,
   useToast,
-  Heading,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -26,9 +26,8 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import AuthStore from "../../state/AuthStore";
 import cartStore from "../../state/CartStore";
-import DrawerComponent from "./Drawer";
-import CourseCard from "./CoursesCard";
 import SearchCard from "../home/SearchCard";
+import DrawerComponent from "./Drawer";
 
 const Navbar = () => {
   const btnRef = useRef();
@@ -52,8 +51,6 @@ const Navbar = () => {
   const [isLoading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
-  if (!token) return;
-
   const headers = {
     authorization: "Bearer " + token,
   };
@@ -119,59 +116,81 @@ const Navbar = () => {
 
   return (
     <>
-      <HStack
-        justifyContent="space-between"
-        alignItems="center"
-        paddingY={3}
-        paddingX={6}
-        color="white"
-        bg={"#283593"}
-      >
-        <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={onOpen} />
-        <DrawerComponent isOpen={isOpen} onClose={onClose} />
-        <Text
-          fontSize={"4xl"}
-          fontWeight="bold"
-          cursor="pointer"
-          onClick={() => navigate("/")}
-          fontFamily="cursive"
+      {username ? (
+        <HStack
+          justifyContent="space-between"
+          alignItems="center"
+          paddingY={3}
+          paddingX={6}
           color="white"
-          flex="1"
-          textAlign="center"
-          ml={"150px"}
+          bg="#283593"
         >
-          Learn.io
-        </Text>
-        <Flex align="center">
-          <Box position="relative" mr={4}>
-            <Badge
-              colorScheme="red"
-              borderRadius="full"
-              fontSize="15px"
-              position="absolute"
-              top="-8px"
-              right="-8px"
-              zIndex="10"
-            >
-              {cart.length}
-            </Badge>
+          <IconButton ref={btnRef} icon={<HamburgerIcon />} onClick={onOpen} />
+          <DrawerComponent isOpen={isOpen} onClose={onClose} />
+          <Text
+            fontSize="4xl"
+            fontWeight="bold"
+            cursor="pointer"
+            onClick={() => navigate("/courses")}
+            fontFamily="cursive"
+            color="white"
+            flex="1"
+            textAlign="center"
+            ml="165px"
+          >
+            Learn.io
+          </Text>
+          <Flex align="center" gap={2}>
+            <Box position="relative" mr={4}>
+              <Badge
+                colorScheme="red"
+                borderRadius="full"
+                fontSize="15px"
+                position="absolute"
+                top="-8px"
+                right="-8px"
+                zIndex="10"
+              >
+                {cart.length}
+              </Badge>
+              <IconButton
+                onClick={setIsCartOpen}
+                aria-label="Shop"
+                icon={<AiFillShopping />}
+              />
+            </Box>
             <IconButton
-              onClick={setIsCartOpen}
-              aria-label="Shop"
-              icon={<AiFillShopping />}
+              aria-label="Search"
+              icon={<BiSearchAlt2 />}
+              fontSize="1.5rem"
+              onClick={() => setIsSearchOpen(true)}
             />
-          </Box>
-          <IconButton
-            aria-label="Search"
-            icon={<BiSearchAlt2 />}
-            fontSize="1.5rem"
-            onClick={() => setIsSearchOpen(true)}
-          />
-          <Button ml={7} colorScheme="orange" onClick={handleLogout}>
-            Log-Out
-          </Button>
+            <Button ml={7} colorScheme="orange" onClick={handleLogout}>
+              Log-Out
+            </Button>
+          </Flex>
+        </HStack>
+      ) : (
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          bgGradient="linear(to-r, #FFA500, #FF6347)"
+          h="80px"
+          color="white"
+          boxShadow="md"
+        >
+          <Text
+            fontSize={{ base: "3xl", md: "4xl" }}
+            fontWeight="bold"
+            fontFamily="cursive"
+            letterSpacing="wide"
+            textTransform="uppercase"
+            textAlign="center"
+          >
+            User Dashboard
+          </Text>
         </Flex>
-      </HStack>
+      )}
       {isSearchOpen && (
         <Modal
           isOpen={isSearchOpen}
@@ -197,7 +216,11 @@ const Navbar = () => {
                       onChange={(e) => setSearch(e.target.value)}
                       borderColor="black"
                     />
-                    <Button colorScheme="twitter" leftIcon={<BiSearchAlt2 />}>
+                    <Button
+                      colorScheme="twitter"
+                      leftIcon={<BiSearchAlt2 />}
+                      onClick={handleSearch}
+                    >
                       Search
                     </Button>
                   </Flex>

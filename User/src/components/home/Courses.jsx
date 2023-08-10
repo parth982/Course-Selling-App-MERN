@@ -38,10 +38,10 @@ const Courses = () => {
   }, []);
 
   return (
-    <>
-      <Box textAlign="center" marginY="4">
-        <Heading as="h1" size="xl" color="orange.700" marginBottom="2">
-          All Courses
+    <Box bg={"gray.200"} height={"100vh"}>
+      <Box textAlign="center" pt={4}>
+        <Heading as="h1" size="xl" color="orange.600" marginBottom="2">
+          Available Courses
         </Heading>
       </Box>
 
@@ -52,13 +52,13 @@ const Courses = () => {
           </Text>
         </Box>
       ) : (
-        <SimpleGrid
-          padding={10}
-          width="90%"
-          margin="auto"
-          columns={{ base: "2", md: "3", lg: "4" }}
-          spacingY={8}
-          spacingX={8}
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+          gap="20px"
+          paddingX="60px"
+          py={5}
+          margin="0 auto"
         >
           {courses?.map((course) => (
             <CourseCard
@@ -68,9 +68,9 @@ const Courses = () => {
               cart={cart}
             />
           ))}
-        </SimpleGrid>
+        </Box>
       )}
-    </>
+    </Box>
   );
 };
 

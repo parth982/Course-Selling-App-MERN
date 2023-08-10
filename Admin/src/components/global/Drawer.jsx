@@ -1,4 +1,4 @@
-import { AtSignIcon, ChevronRightIcon, ViewIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon, PlusSquareIcon, ViewIcon } from "@chakra-ui/icons";
 import {
   Divider,
   Drawer,
@@ -18,25 +18,25 @@ const DrawerComponent = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
 
   return (
-    <Drawer isOpen={isOpen} placement="left" onClose={onClose} size={"xs"}>
+    <Drawer isOpen={isOpen} placement="left" onClose={onClose} size="xs">
       <DrawerOverlay />
       <DrawerContent bg="purple.500" color="white">
         <DrawerCloseButton color={"black"} />
         <DrawerHeader
           fontSize="3xl"
+          textColor={"black"}
           fontWeight="bold"
           bg="gray.400"
-          textColor={"black"}
         >
           Explore Features
         </DrawerHeader>
         <DrawerBody mt={3}>
           <Divider />
           <Flex
-            justifyContent={"space-between"}
+            justifyContent="space-between"
             mb={2}
             mt={2}
-            alignItems={"center"}
+            alignItems="center"
             onClick={() => {
               navigate("/courses");
               onClose();
@@ -44,23 +44,27 @@ const DrawerComponent = ({ isOpen, onClose }) => {
             _hover={{ cursor: "pointer" }}
           >
             <IconButton icon={<ViewIcon />} />
-            <Text fontSize="xl">All Courses</Text>
+            <Text fontSize={"xl"} t>
+              All Courses
+            </Text>
             <ChevronRightIcon />
           </Flex>
           <Divider />
           <Flex
-            justifyContent={"space-between"}
-            alignItems={"center"}
+            justifyContent="space-between"
+            alignItems="center"
             mt={2}
             mb={2}
             onClick={() => {
-              navigate("/Purchased");
+              navigate("/AddCourse");
               onClose();
             }}
             _hover={{ cursor: "pointer" }}
           >
-            <IconButton icon={<AtSignIcon />} />
-            <Text fontSize="xl">Purchased Courses</Text>
+            <IconButton icon={<PlusSquareIcon />} />
+            <Text fontSize={"xl"} t>
+              Create Course
+            </Text>
             <ChevronRightIcon />
           </Flex>
           <Divider />

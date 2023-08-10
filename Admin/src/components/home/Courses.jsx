@@ -1,27 +1,12 @@
-import {
-  Box,
-  CardBody,
-  Card,
-  Heading,
-  Divider,
-  CardFooter,
-  Stack,
-  Image,
-  Text,
-  Center,
-  Button,
-  SimpleGrid,
-  useToast,
-} from "@chakra-ui/react";
+import { Box, Heading, SimpleGrid, Text, useToast } from "@chakra-ui/react";
 
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import React, { useEffect } from "react";
 import CartStore from "../../state/CartStore";
+import CourseCard from "../global/CourseCard";
 
 const Courses = () => {
   const toast = useToast();
-  const navigate = useNavigate();
   const { courses, setCourses } = CartStore();
 
   const headers = {
@@ -61,58 +46,37 @@ const Courses = () => {
   };
 
   return (
-    <>
+    <Box bg={"gray.200"} height={"100vh"}>
+      <Box textAlign="center" pt={4}>
+        <Heading as="h1" size="xl" color="orange.600" marginBottom="2">
+          Uploaded Courses
+        </Heading>
+      </Box>
+
       {courses?.length === 0 ? (
-        <p>No courses available</p>
+        <Box textAlign="center" mt={"200px"}>
+          <Text fontSize="2xl" fontWeight="semibold" color="gray.600">
+            No courses available
+          </Text>
+        </Box>
       ) : (
-        <SimpleGrid
-          padding={10}
-          width={"92%"}
-          margin={"auto"}
-          columns={{ base: "1", md: "2", lg: "3" }}
-          spacingY={5}
-          spacingX={5}
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+          gap="20px"
+          paddingX="60px"
+          py={5}
         >
           {courses?.map((course) => (
-            <Box key={course._id}>
-              <Card maxW="sm" border={"1px solid"}>
-                <CardBody>
-                  <Center>
-                    <Image src={course.imageLink} boxSize="150px" />
-                  </Center>
-                  <Stack mt="6" spacing="3">
-                    <Heading size="md">Title: {course.title}</Heading>
-                    <Heading size="sm">
-                      Description: {course.description}
-                    </Heading>
-                    <Text>Price: {course.price}</Text>
-                  </Stack>
-                </CardBody>
-
-                <Divider />
-
-                <CardFooter justifyContent={"space-between"}>
-                  <Button
-                    variant="solid"
-                    colorScheme="green"
-                    onClick={() => navigate(`/courses/${course._id}`)}
-                  >
-                    Update
-                  </Button>
-                  <Button
-                    variant="solid"
-                    colorScheme="red"
-                    onClick={() => delCourse(course._id)}
-                  >
-                    Delete
-                  </Button>
-                </CardFooter>
-              </Card>
-            </Box>
+            <CourseCard
+              key={course._id}
+              course={course}
+              delCourse={delCourse}
+            />
           ))}
-        </SimpleGrid>
+        </Box>
       )}
-    </>
+    </Box>
   );
 };
 

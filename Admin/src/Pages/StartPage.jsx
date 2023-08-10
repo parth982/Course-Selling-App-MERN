@@ -1,53 +1,91 @@
-import React from "react";
-import AuthForm from "../components/Auth/AuthForm";
-
 import {
-  Container,
   Box,
-  Text,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
+  Container,
+  Icon,
   Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
 } from "@chakra-ui/react";
+import React from "react";
+import { FaGraduationCap } from "react-icons/fa";
+import AuthForm from "../components/Auth/AuthForm";
 
 const StartPage = () => {
   return (
-    <Container>
-      <Box
-        display="flex"
-        justifyContent={"center"}
-        marginTop={"10vh"}
-        border={"2px"}
-        marginBottom={3}
-      >
-        <Text fontFamily={"mono"} fontSize={"5xl"}>
-          Learn.io
-        </Text>
-      </Box>
+    <Box bg={"#333333"}>
+      <Container maxW="xl" py={16}>
+        <Box
+          bgGradient="linear(to-r, #F054A3, #C4375B)"
+          borderRadius="lg"
+          boxShadow="xl"
+          p={2}
+          mb={1}
+          textAlign="center"
+          color="white"
+        >
+          <Icon as={FaGraduationCap} boxSize={{ base: 10, md: 12 }} />
+          <Text
+            fontFamily="heading"
+            fontSize={{ base: "4xl", md: "5xl" }}
+            fontWeight="bold"
+          >
+            Learn.io
+          </Text>
+          <Text fontFamily="body" fontSize={{ base: "lg", md: "xl" }} mt={2}>
+            Elevate Your Learning Journey
+          </Text>
+        </Box>
 
-      <Box border={"2px"} padding={4}>
-        <Tabs variant="solid-rounded">
-          <TabList>
-            <Tab border={"2px"} borderRadius={45} width="50%">
-              Login
-            </Tab>
-            <Tab border={"2px"} borderRadius={45} width="50%">
-              Sign Up
-            </Tab>
-          </TabList>
-          <TabPanels>
-            <TabPanel>
-              <AuthForm type="login" />
-            </TabPanel>
-            <TabPanel>
-              <AuthForm type="signup" />
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
-      </Box>
-    </Container>
+        <Box bg="white" borderRadius="lg" boxShadow="xl" p={8}>
+          <Tabs variant="soft-rounded" size="md">
+            <TabList>
+              <Tab
+                fontWeight="bold"
+                borderRadius="lg"
+                width="50%"
+                color="#283593"
+                border="0.5px solid #283593"
+                mr={2}
+              >
+                Login
+              </Tab>
+              <Tab
+                fontWeight="bold"
+                borderRadius="lg"
+                width="50%"
+                color="#283593"
+                border="0.5px solid #283593"
+              >
+                Sign Up
+              </Tab>
+            </TabList>
+            <TabPanels mt={2}>
+              <TabPanel>
+                <AuthForm
+                  type="login"
+                  style={{
+                    backgroundColor: "lightgray",
+                    borderColor: "#283593",
+                  }}
+                />
+              </TabPanel>
+              <TabPanel>
+                <AuthForm
+                  type="signup"
+                  style={{
+                    backgroundColor: "lightgray",
+                    borderColor: "#283593",
+                  }}
+                />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
