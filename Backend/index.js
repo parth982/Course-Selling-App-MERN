@@ -8,10 +8,20 @@ const adminRoutes = require("./Routes/adminRoutes");
 const userRoutes = require("./Routes/userRoutes");
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://learn-io-hazel.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: "true",
+  })
+);
 dotenv.config();
 
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
+
+app.get("/", (req, res) => {
+  res.json("hello");
+});
 
 app.use("/admin", adminRoutes);
 app.use("/users", userRoutes);
