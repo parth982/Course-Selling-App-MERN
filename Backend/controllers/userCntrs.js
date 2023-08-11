@@ -103,6 +103,15 @@ const QueryCourses = asyncHandler(async (req, res) => {
   res.send(courses);
 });
 
+const getUsername = asyncHandler(async (req, res) => {
+  const { username } = req.user;
+  if (username) {
+    res.json({ username });
+  } else {
+    res.status(403).json({ message: "User not found" });
+  }
+});
+
 module.exports = {
   signupUser,
   loginUser,
@@ -110,4 +119,5 @@ module.exports = {
   purchaseCourse,
   getUserPurchasedCourses,
   QueryCourses,
+  getUsername,
 };

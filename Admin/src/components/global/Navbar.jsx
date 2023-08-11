@@ -32,7 +32,7 @@ const Navbar = () => {
       authorization: "Bearer " + token,
     };
     axios
-      .get("http://localhost:4000/admin/me", { headers })
+      .get("http://localhost:4000/admin/username", { headers })
       .then((res) => {
         setUsername(res.data.username);
       })

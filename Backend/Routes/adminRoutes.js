@@ -1,5 +1,5 @@
 const express = require("express");
-const jwtAuth = require("../Middleware/jwtAuthMDW");
+const jwtAuth = require("../Middleware/jwtAuthAdmin");
 
 const {
   signupAdmin,
@@ -21,6 +21,6 @@ router.route("/courses/:courseId").get(jwtAuth, getOneCourse);
 router.route("/courses/:courseId").put(jwtAuth, updateCourse);
 router.route("/courses/:courseId").delete(jwtAuth, deleteCourse);
 router.route("/courses").get(jwtAuth, getCourses);
-router.route("/me").get(jwtAuth, getUsername);
+router.route("/username").get(jwtAuth, getUsername);
 
 module.exports = router;

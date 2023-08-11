@@ -12,13 +12,12 @@ import {
   IconButton,
   Image,
   Text,
-  Flex,
 } from "@chakra-ui/react";
 import styled from "@emotion/styled";
-import React from "react";
-import CartStore from "../../state/CartStore";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import CartStore from "../../state/CartStore";
+import { useParams } from "react-router-dom";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -35,6 +34,7 @@ const CartMenu = () => {
     purchasedCourses,
     setPurchasedCourses,
   } = CartStore();
+  const { success } = useParams();
 
   const totalPrice = cart.reduce((total, course) => {
     return total + (course?.price || 0);
@@ -43,6 +43,10 @@ const CartMenu = () => {
   const headers = {
     authorization: "Bearer " + localStorage.getItem("token"),
   };
+
+  useEffect(() => {
+    if (success === "true") buyCourse(cart.map((c) => c._id));
+  }, [success]);
 
   const checkout = () => {
     axios
@@ -53,7 +57,6 @@ const CartMenu = () => {
       )
       .then((res) => {
         window.location = res.data.url;
-        buyCourse(cart.map((c) => c._id));
       })
       .catch((e) => {
         console.error(e.error);
@@ -62,12 +65,10 @@ const CartMenu = () => {
 
   const buyCourse = (cartIds) => {
     const originalPurchasedCourse = [...purchasedCourses];
-    console.log(cartIds);
     setPurchasedCourses([...purchasedCourses, ...cartIds]);
     cartIds.forEach((courseId) => {
       axios
         .put("http://localhost:4000/users/courses/" + courseId, {}, { headers })
-        .then(() => {})
         .catch(() => setPurchasedCourses(originalPurchasedCourse));
     });
   };

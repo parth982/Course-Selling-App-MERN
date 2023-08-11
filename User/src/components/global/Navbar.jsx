@@ -57,7 +57,7 @@ const Navbar = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/admin/me", { headers })
+      .get("http://localhost:4000/users/username", { headers })
       .then((res) => {
         setUsername(res.data.username);
       })

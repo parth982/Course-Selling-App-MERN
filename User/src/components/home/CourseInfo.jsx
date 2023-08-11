@@ -79,7 +79,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    setInterval(() => getAllCoursesInfo(), 1000);
+    getAllCoursesInfo();
   }, []);
 
   return (

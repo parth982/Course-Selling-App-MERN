@@ -6,6 +6,8 @@ import Courses from "./components/home/Courses";
 import Purchased from "./components/home/Purchased";
 import CourseInfo from "./components/home/CourseInfo";
 import CartMenu from "./components/global/CartMenu";
+import PaymentSuccess from "./Pages/PaymentSuccess";
+import PaymentFailure from "./Pages/PaymentFailure";
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <Route path="/courses" element={<Courses />} />
         <Route path="/courses/:id" element={<CourseInfo />} />
         <Route path="/Purchased" element={<Purchased />} />
+        <Route path="/stripeSuccess" element={<PaymentSuccess />} />
+        <Route path="/stripeFailure" element={<PaymentFailure />} />
       </Routes>
       <CartMenu />
     </BrowserRouter>
