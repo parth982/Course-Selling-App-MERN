@@ -8,13 +8,7 @@ const adminRoutes = require("./Routes/adminRoutes");
 const userRoutes = require("./Routes/userRoutes");
 
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "https://learn-io-hazel.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: "true",
-  })
-);
+app.use(cors());
 dotenv.config();
 
 const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
@@ -44,8 +38,8 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: 1,
         };
       }),
-      success_url: `${process.env.CLIENT_URL}/stripeSuccess?success=true`,
-      cancel_url: `${process.env.CLIENT_URL}/stripeFailure?success=false`,
+      success_url: `${process.env.CLIENT_URL}/stripeSuccess?status=success`,
+      cancel_url: `${process.env.CLIENT_URL}/stripeFailure?status=faliure`,
     });
     res.json({ url: session.url });
   } catch (e) {

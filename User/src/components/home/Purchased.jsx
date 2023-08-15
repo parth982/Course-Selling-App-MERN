@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
 import {
   Box,
-  CardBody,
   Card,
-  Heading,
+  CardBody,
   Divider,
-  Stack,
+  Heading,
   Image,
+  Stack,
   Text,
-  Center,
-  SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useToast } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 
 const Purchased = () => {
   const toast = useToast();

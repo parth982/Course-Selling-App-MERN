@@ -17,7 +17,7 @@ import styled from "@emotion/styled";
 import axios from "axios";
 import React, { useEffect } from "react";
 import CartStore from "../../state/CartStore";
-import { useParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -34,7 +34,8 @@ const CartMenu = () => {
     purchasedCourses,
     setPurchasedCourses,
   } = CartStore();
-  const { success } = useParams();
+  const [searchParam] = useSearchParams();
+  const navigate = useNavigate();
 
   const totalPrice = cart.reduce((total, course) => {
     return total + (course?.price || 0);
@@ -45,8 +46,13 @@ const CartMenu = () => {
   };
 
   useEffect(() => {
-    if (success === "true") buyCourse(cart.map((c) => c._id));
-  }, [success]);
+    const status = searchParam.get("status");
+    if (status && status === "success") {
+      console.log("expanded");
+      console.log(cart);
+      buyCourse(cart.map((c) => c._id));
+    }
+  }, [searchParam]);
 
   const checkout = () => {
     axios
@@ -56,7 +62,9 @@ const CartMenu = () => {
         { headers: { "Content-Type": "application/json" } }
       )
       .then((res) => {
+        // console.log(res.data.url);
         window.location = res.data.url;
+        // navigate(res.data.url);
       })
       .catch((e) => {
         console.error(e.error);
