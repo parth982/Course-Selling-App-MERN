@@ -1,11 +1,23 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-const AuthStore = create((set) => ({
-  isLogged: false,
+const AuthStore = create(
+  persist(
+    (set) => ({
+      isLogged: false,
 
-  setIsLogged: () => {
-    set((store) => ({ isLogged: !store.isLogged }));
-  },
-}));
+      setIsLogged: () => {
+        set((store) => ({ isLogged: !store.isLogged }));
+      },
+    }),
+    {
+      name: "zustand-auth-user",
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({
+        isLogged: state.isLogged,
+      }),
+    }
+  )
+);
 
 export default AuthStore;

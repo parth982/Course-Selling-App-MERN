@@ -12,6 +12,7 @@ import AuthStore from "./state/AuthStore";
 
 const App = () => {
   const { isLogged } = AuthStore();
+  console.log(isLogged);
   return (
     <BrowserRouter>
       <Navbar />
